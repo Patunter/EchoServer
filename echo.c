@@ -6,8 +6,9 @@
 #include<unistd.h>
 
 #define BUFFER_SIZE 1024
+#define PORT 7890
 
-int main(int argc , char* argv[]) {
+int main( void ) {
 	int socket1, socket2, read;
 	int option = 1;
 	char buffer[BUFFER_SIZE];
@@ -16,20 +17,20 @@ int main(int argc , char* argv[]) {
 	socklen_t addr_size;
 
 	socket1 = socket(PF_INET, SOCK_STREAM, 0);
-	setSockopt(socket1, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+	setsockopt(socket1, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 
 	serverAddr.sin_family = AF_INET;
 
-	serverAddr.sin_port = htons(6969);
+	serverAddr.sin_port = htons(PORT);
 	serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	memset(serverAddr.sin_zero, '\0', sizeof serverAddr.sin_zero);
 
 	bind(socket1, (struct sockaddr *) &serverAddr, sizeof(serverAddr));
 
 	if(listen(socket1, 5) == 0) {
-		printf("Listening\n");
+		printf("Please write onto Port %i\n", PORT);
 	}else {
-		printf("Nicht sehr gut");
+		printf("Es gab einen Fehler!");
 	}
 
 	addr_size = sizeof serverStorage;
@@ -44,7 +45,6 @@ int main(int argc , char* argv[]) {
 			return 0;
 		}
 	}
-
 
 
 	return 0;
